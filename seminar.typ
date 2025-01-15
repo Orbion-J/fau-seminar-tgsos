@@ -3,7 +3,6 @@
 #import "@preview/ctheorems:1.1.3": *
 #import "@preview/numbly:0.1.0": numbly
 #import "@preview/curryst:0.3.0": rule, proof-tree
-#import "@preview/commute:0.2.0": node, arr, commutative-diagram
 #import "@preview/fletcher:0.5.4" as fletcher: diagram, node, edge
 
 
@@ -51,14 +50,16 @@
   config-info(
     title: [Trace Equivalence in Abstract GSOS],
     subtitle: [Oberseminar des Lehrstuhls für Theoretische Informatik],
-    author: [*Robin Jourde*, Stelios Tsampas, Sergey Goncharov, Henning Urbat, Pouya Partow, Jonas Forster],
+    author: [*Robin Jourde*#footnote[ENS de Lyon -- robin.jourde\@ens-lyon.fr], Stelios Tsampas, Sergey Goncharov, Henning Urbat, Pouya Partow, Jonas Forster],
     date: [14th January 2025],
     // institution: [],
     // logo: [],
   ),
-  config-common(handout: true)
+//   config-common(handout: true)
 )
 
+#show footnote.entry: set text(size:15pt)
+#set footnote.entry(separator: none)
 
 #set heading(numbering: numbly("{1}.", default: "1.1"))
 
@@ -507,7 +508,7 @@ $ zeta : A^* fmultimap B A^* "or" A^* -> T B A^* wide wide zeta(epsilon) = {*}, 
 		one-rule(
 			name:$forall a$,
 			$! t ->^a ? t'$,
-			$t ->^a ?t'$
+			$t ->^a t'$
 		),
 		one-rule(
 			$? t ->^tau t$,
