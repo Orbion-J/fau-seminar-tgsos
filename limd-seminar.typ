@@ -1,10 +1,8 @@
 #import "@preview/touying:0.6.1": *
 #import themes.metropolis: *
-#import "@preview/ctheorems:1.1.3": *
-// #import "@preview/numbly:0.1.0": numbly
 #import "@preview/curryst:0.5.0": rule, prooftree
 #import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
-
+#import "@preview/great-theorems:0.1.2" : *
 
 #show list.item: it => {
   // The generated terms is not tight
@@ -56,7 +54,7 @@
     // institution: [],
     // logo: [],
   ),
-  config-common(handout: true)
+//   config-common(handout: true)
 )
 
 #show footnote.entry: set text(size:15pt)
@@ -64,25 +62,30 @@
 #set footnote.entry(separator: none)
 
 #set heading(numbering: "1.1")
-// #set heading(numbering: numbly("{1}.", default: "1.1"))
 
 #show outline.entry: it => it.indented(it.prefix(), it.body())
 
 #show outline.entry.where(level : 2) : set text(size: 10pt)
 
-// Theorems configuration by ctheorems
-#show: thmrules.with(qed-symbol: $square$)
-#let theorem = thmbox("theorem", "Theorem", fill: rgb("#eeffee"), base:none).with(numbering:none)
-#let corollary = thmplain(
-  "corollary",
-  "Corollary",
-  base: "theorem",
-  titlefmt: strong
+// Theorem config by great-theorem
+#show: great-theorems-init
+#let theorem = mathblock(
+  blocktitle: "Theorem",
+  counter: counter("theorems"),
+	fill:rgb("eeffee"),
+	inset:1em,
+	radius:0.5em,
 )
-#let definition = thmbox("definition", "Definition", inset: (x: 1.2em, top: 1em))
-#let example = thmbox("example", "Example", fill: rgb("#fffedd")).with(numbering: none)
-#let remark = thmplain("remark", "Remark").with(numbering: none)
-#let proof = thmproof("proof", "Proof")
+#let example = mathblock(
+  blocktitle: "Example",
+	fill:rgb("fffedd"),
+	inset:1em,
+	radius:0.5em,
+)
+#let remark = mathblock(
+  blocktitle: "Remark",
+)
+#let proof = proofblock()
 
 #let onerule(..r) = prooftree(vertical-spacing:0.3em, rule(..r))
 
@@ -347,7 +350,6 @@ with $u$ complex term with variables in ${x_1...x_n, y_i...}$ with *at most one 
 #theorem[
 	Let $cal(R)$ be a smooth and affine set of Trace-GSOS rules. Let $X$ be a set of terms equipped with behaviour $k : X -> cal(P)_"ne" (A times X + {star})$ induced by $cal(R)$. Then trace equivalence $tilde_"tr"$ is a congruence.
 ]#pause
-#v(-1em)
 #proof[
 	Show that the trace of a complex term can be obtained from the traces of its subterms.#pause
 	- consider complex terms with words of $A^oo$ as leaves, and behaviour induced by $cal(R)$ with $a.w ->^a w$ and $epsilon arrow.b$ #pause
