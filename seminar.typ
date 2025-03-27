@@ -1,9 +1,9 @@
-#import "@preview/touying:0.5.5": *
+#import "@preview/touying:0.6.1": *
 #import themes.metropolis: *
 #import "@preview/ctheorems:1.1.3": *
-#import "@preview/numbly:0.1.0": numbly
-#import "@preview/curryst:0.3.0": rule, proof-tree
-#import "@preview/fletcher:0.5.4" as fletcher: diagram, node, edge
+// #import "@preview/numbly:0.1.0": numbly
+#import "@preview/curryst:0.5.0": rule, prooftree
+#import "@preview/fletcher:0.5.6" as fletcher: diagram, node, edge
 
 
 #show list.item: it => {
@@ -61,9 +61,10 @@
 #show footnote.entry: set text(size:15pt)
 #set footnote.entry(separator: none)
 
-#set heading(numbering: numbly("{1}.", default: "1.1"))
+#set heading(numbering: "1.1")
+// #set heading(numbering: numbly("{1}.", default: "1.1"))
 
-#show outline.entry: it => [#it.body]
+#show outline.entry: it => it.indented(it.prefix(), it.body())
 
 // Theorems configuration by ctheorems
 #show: thmrules.with(qed-symbol: $square$)
@@ -79,7 +80,7 @@
 #let remark = thmplain("remark", "Remark").with(numbering: none)
 #let proof = thmproof("proof", "Proof")
 
-#let one-rule(..r) = proof-tree(horizontal-spacing:0.3em, rule(..r))
+#let onerule(..r) = prooftree(vertical-spacing:0.3em, rule(..r))
 
 #let fmultimap = math.class("relation", context box(
   baseline: -0.1em,
@@ -155,20 +156,16 @@
 \
 
 #align(center)[#grid(columns:3,column-gutter:1em,
-	proof-tree(horizontal-spacing:0.3em,
-			rule(
-				$sigma(x_1 ... x_n) ->^b u[x_1...x_n, y_(i,k)...]$,
-				${ x_i ->^(a_(i,k)) y_(i,k) }_(i in I, k in K_i)$,
-				${ x_j arrow.b }_(j in J)$,
-			)
+		onerule(
+			$sigma(x_1 ... x_n) ->^b u[x_1...x_n, y_(i,k)...]$,
+			${ x_i ->^(a_(i,k)) y_(i,k) }_(i in I, k in K_i)$,
+			${ x_j arrow.b }_(j in J)$,
 		),
 		[or],
-		proof-tree(horizontal-spacing:0.3em,
-			rule(
-				$sigma(x_1 ... x_n) arrow.b$,
-				${ x_i ->^(a_(i,k)) y_(i,k) }_(i in I, k in K_i)$,
-				${ x_j arrow.b }_(j in J)$,
-			)
+		onerule(
+			$sigma(x_1 ... x_n) arrow.b$,
+			${ x_i ->^(a_(i,k)) y_(i,k) }_(i in I, k in K_i)$,
+			${ x_j arrow.b }_(j in J)$,
 		)
 )]
 
@@ -183,24 +180,24 @@ with $sigma in cal(O), n = "ar" sigma, u in Sigma^*, a_(i,k), b in A, I, J, K_i 
 - rules
 #align(center)[
 	#grid(columns:6, gutter: 1.5em,
-		uncover("3-", one-rule($0 arrow.b$)),
-		uncover("4-",one-rule(name:$forall a$, $a.t ->^a t$)),
-		uncover("5-",one-rule(
+		uncover("3-", onerule($0 arrow.b$)),
+		uncover("4-",onerule(name:$forall a$, $a.t ->^a t$)),
+		uncover("5-",onerule(
 			name:$forall a$,
 			$t + u ->^a t'$,
 			$t ->^a t'$
 		)),
-		uncover("5-", one-rule(
+		uncover("5-", onerule(
 			name:$forall a$,
 			$t + u ->^a u'$,
 			$u ->^a u'$
 		)),
-		uncover("5-", one-rule(
+		uncover("5-", onerule(
 			$t +u arrow.b$,
 			$t arrow.b$,
 			$u arrow.b$
 		)),
-		uncover("6-", one-rule(
+		uncover("6-", onerule(
 			$? t ->^tau t' + t''$,
 			$t ->^tau t'$,
 			$t ->^tau t''$,
@@ -242,15 +239,15 @@ with $sigma in cal(O), n = "ar" sigma, u in Sigma^*, a_(i,k), b in A, I, J, K_i 
 	$ rho : 1 + A times (X times cal(P)(1 + A times X)) + (X times cal(P)(1 + A times X))^2 -> cal(P)(1 + A times Sigma^* X) $ #pause
 
 	- $rho(*) = { * }$
-	#only("4", align(center, one-rule($0 arrow.b$))) #pause
+	#only("4", align(center, onerule($0 arrow.b$))) #pause
 
 	- $rho((a, t, T)) = { (a,t) }$
-	#only("5", align(center, one-rule(name:$forall a$, $a.t ->^a t$))) #pause
+	#only("5", align(center, onerule(name:$forall a$, $a.t ->^a t$))) #pause
 
 	- $rho( (t, T), (u, U) ) = { (a, t') | forall (a,t') in T } union uncover("7-", { (a, u') | forall (a, u') in U } union ) uncover("8-", { * | * in T and * in U } )$
 	#only("6", align(center)[
 		#grid(columns:1, gutter: 3em,
-			one-rule(
+			onerule(
 				name:$forall a$,
 				$t + u ->^a t'$,
 				$t ->^a t'$
@@ -259,12 +256,12 @@ with $sigma in cal(O), n = "ar" sigma, u in Sigma^*, a_(i,k), b in A, I, J, K_i 
 	])
 	#only("7", align(center)[
 		#grid(columns:2, gutter: 3em,
-			one-rule(
+			onerule(
 				name:$forall a$,
 				$t + u ->^a t'$,
 				$t ->^a t'$
 			),
-			one-rule(
+			onerule(
 				name:$forall a$,
 				$t + u ->^a u'$,
 				$u ->^a u'$
@@ -273,17 +270,17 @@ with $sigma in cal(O), n = "ar" sigma, u in Sigma^*, a_(i,k), b in A, I, J, K_i 
 	])
 	#only("8", align(center)[
 		#grid(columns:3, gutter: 3em,
-			one-rule(
+			onerule(
 				name:$forall a$,
 				$t + u ->^a t'$,
 				$t ->^a t'$
 			),
-			one-rule(
+			onerule(
 				name:$forall a$,
 				$t + u ->^a u'$,
 				$u ->^a u'$
 			),
-			one-rule(
+			onerule(
 				$t +u arrow.b$,
 				$t arrow.b$,
 				$u arrow.b$
@@ -363,18 +360,18 @@ $ zeta : A^* fmultimap B A^* "or" A^* -> T B A^* wide wide zeta(epsilon) = {*}, 
 #example[
 	#align(center)[
 		#grid(columns:4, gutter: 1.5em,
-			[#one-rule(
+			[#onerule(
 				$? t ->^tau t' + t''$,
 				$t ->^tau t'$,
 				$t ->^tau t''$,
 			) #emoji.face.unhappy],
-			[#one-rule(name:$forall a$, $a.t ->^a t$) #emoji.face.unhappy],
-			[#one-rule(
+			[#onerule(name:$forall a$, $a.t ->^a t$) #emoji.face.unhappy],
+			[#onerule(
 				name:$forall a, b$,
 				$a.t ->^a t$,
 				$t ->^b t'$
 			) #emoji.face.cool],
-			[#one-rule(
+			[#onerule(
 				name:$forall a$,
 				$a.t ->^a t$,
 				$ t arrow.b$
@@ -466,12 +463,12 @@ $ zeta : A^* fmultimap B A^* "or" A^* -> T B A^* wide wide zeta(epsilon) = {*}, 
 
 #example[ $t::= 0 | a.t | t + t | med ? t | ! t$ with the previous rules for $0, a., +$ and #pause
 	#align(center)[#grid(columns:2,gutter:1.5em,
-		one-rule(
+		onerule(
 			name:$forall a$,
 			$! t ->^a ? t'$,
 			$t ->^a t'$
 		),
-		one-rule(
+		onerule(
 			name:$forall a$,
 			$? t ->^a t + t'$,
 			$t ->^a t'$
@@ -501,122 +498,122 @@ $ zeta : A^* fmultimap B A^* "or" A^* -> T B A^* wide wide zeta(epsilon) = {*}, 
 	#uncover("4-")[$tr !a(b+c) = { a b, a c, a b b, underline(a b c), underline(a c b), a c c }$] #uncover("6-")[$eq.not { a b, a c, a b b, a c c } = tr !(a b + a c)$]
 ]
 
----
+// ---
 
-#example[ $t::= 0 | a.t | t + t | med ? t | ! t$ with the previous rules for $0, a., +$ and
-	#align(center)[#grid(columns:2,gutter:1.5em,
-		one-rule(
-			name:$forall a$,
-			$! t ->^a ? t'$,
-			$t ->^a t'$
-		),
-		one-rule(
-			$? t ->^tau t$,
-			$t ->^tau t'$
-		)
-	)
-	] #pause
-	#align(center)[#diagram(spacing:(0.5em,1.5em),
-		node((1,0), $!a(b+tau)$), edge($a$, "->"),
-		node((1,1), $?(b+tau)$), edge($tau$, "->"), 
-		node((1,2), $b + tau$), edge($b$, "->"), edge((2,3), $tau$, "->"),
-		node((0,3), $0$),
-		node((2,3), $0$)
-	) #h(3em) #pause #pause
-	#diagram(spacing:(0.5em,1.5em),
-		node((1,0), $!(a b + a tau)$), edge($a$, "->"), edge((2,1), $a$, "->"),
-		node((0,1), $?b$), edge((0,2),"-/->"),
-		node((0,2), ""),
-		node((2,1), $?tau$), edge($tau$, "->"),
-		node((2,2), $tau$), edge($tau$, "->", label-side:left),
-		node((2,3), $0$),
-	) #pause]
-	#meanwhile
-	#uncover("3-")[$tr !a(b+tau) = { underline(a tau b), a tau tau }$]
-	#uncover("5-")[$eq.not { a tau tau } = tr !(a b + a tau)$] 
-] #pause
-$-->$ observations that are "not used" #emoji.face.unhappy
+// #example[ $t::= 0 | a.t | t + t | med ? t | ! t$ with the previous rules for $0, a., +$ and
+// 	#align(center)[#grid(columns:2,gutter:1.5em,
+// 		onerule(
+// 			name:$forall a$,
+// 			$! t ->^a ? t'$,
+// 			$t ->^a t'$
+// 		),
+// 		onerule(
+// 			$? t ->^tau t$,
+// 			$t ->^tau t'$
+// 		)
+// 	)
+// 	] #pause
+// 	#align(center)[#diagram(spacing:(0.5em,1.5em),
+// 		node((1,0), $!a(b+tau)$), edge($a$, "->"),
+// 		node((1,1), $?(b+tau)$), edge($tau$, "->"), 
+// 		node((1,2), $b + tau$), edge($b$, "->"), edge((2,3), $tau$, "->"),
+// 		node((0,3), $0$),
+// 		node((2,3), $0$)
+// 	) #h(3em) #pause #pause
+// 	#diagram(spacing:(0.5em,1.5em),
+// 		node((1,0), $!(a b + a tau)$), edge($a$, "->"), edge((2,1), $a$, "->"),
+// 		node((0,1), $?b$), edge((0,2),"-/->"),
+// 		node((0,2), ""),
+// 		node((2,1), $?tau$), edge($tau$, "->"),
+// 		node((2,2), $tau$), edge($tau$, "->", label-side:left),
+// 		node((2,3), $0$, stroke:1pt),
+// 	) #pause]
+// 	#meanwhile
+// 	#uncover("3-")[$tr !a(b+tau) = { underline(a tau b), a tau tau }$]
+// 	#uncover("5-")[$eq.not { a tau tau } = tr !(a b + a tau)$] 
+// ] #pause
+// $-->$ observations that are "not used" #emoji.face.unhappy
 
----
+// ---
 
-- *smoothness* #pause
-	- *linear*: if $x_i -> x_i'$ then not $x_i$ and $x_i'$ in the target #pause
-	- if $x_i$ in the target, the observation on $x_i$ is *irrelevant* ie. any other observation could have been done (the same rule for each other possible observation exists) #pause
+// - *smoothness* #pause
+// 	- *linear*: if $x_i -> x_i'$ then not $x_i$ and $x_i'$ in the target #pause
+// 	- if $x_i$ in the target, the observation on $x_i$ is *irrelevant* ie. any other observation could have been done (the same rule for each other possible observation exists) #pause
 
-- *abstract smoothness*
-#grid(columns:(60%,40%),align:(left, center),
-	diagram(spacing:(1em, 1.5em),
-		node((0,0), $Sigma T(X times B X)$), edge($angle.l T pi_1, T pi_2 angle.r$, "->"),
-			edge((0,1), $lambda$, "->"), edge((0,0), (0,-1), (2,-1), (2,0), $"mix"$, "-->"),
-		node((1,0), $Sigma (T X times T B X)$), edge($"dst"$, "->"),
-		node((2,0), $Sigma T (X times B X)$), edge((2,1), $lambda$, "->"),
-		node((0,1), $T Sigma (X times B X)$), edge($T rho$, "->"),
-		node((0,2), $T^2 B Sigma^* X$), edge($mu$, "->"),
-		node((1,2), $T B Sigma^* X$),
-		node((2,1), $T Sigma (X times B X)$), edge($T rho$, "->"),
-		node((2,2), $T^2 B Sigma^* X$), edge((1,2), $mu$, "->")
-	),
-	[#pause $Phi(rho)(sigma)("mix" X_1 ... "mix" X_n) = Phi(rho)(sigma)(X_1 ... X_n)$ \ where $X_i subset X times B X$]
-)
+// - *abstract smoothness*
+// #grid(columns:(60%,40%),align:(left, center),
+// 	diagram(spacing:(1em, 1.5em),
+// 		node((0,0), $Sigma T(X times B X)$), edge($angle.l T pi_1, T pi_2 angle.r$, "->"),
+// 			edge((0,1), $lambda$, "->"), edge((0,0), (0,-1), (2,-1), (2,0), $"mix"$, "-->"),
+// 		node((1,0), $Sigma (T X times T B X)$), edge($"dst"$, "->"),
+// 		node((2,0), $Sigma T (X times B X)$), edge((2,1), $lambda$, "->"),
+// 		node((0,1), $T Sigma (X times B X)$), edge($T rho$, "->"),
+// 		node((0,2), $T^2 B Sigma^* X$), edge($mu$, "->"),
+// 		node((1,2), $T B Sigma^* X$),
+// 		node((2,1), $T Sigma (X times B X)$), edge($T rho$, "->"),
+// 		node((2,2), $T^2 B Sigma^* X$), edge((1,2), $mu$, "->")
+// 	),
+// 	[#pause $Phi(rho)(sigma)("mix" X_1 ... "mix" X_n) = Phi(rho)(sigma)(X_1 ... X_n)$ \ where $X_i subset X times B X$]
+// )
 
----
+// ---
 
-- need smoothness *for $rho^*$* (terms with more than one layer) #pause
-#example[$t::= 0 | a.t | med ? t$ with the following smooth rules #pause
-	#align(center)[
-		#grid(columns:4, gutter: 1.5em,
-			one-rule($0 arrow.b$),
-			one-rule(
-				name:$forall a, b$,
-				$a.t ->^a t$,
-				$t ->^b t'$
-			),
-			one-rule(
-				name:$forall a$,
-				$a.t ->^a t$,
-				$ t arrow.b$
-			),
-			one-rule(
-				$? t ->^tau t'$,
-				$t ->^tau t'$
-			)
-		)
-	] #pause
-	let $X_1 = {t ->^tau t', u ->^a u'}$ #pause then $"mix" X_1 = { t ->^tau t', t ->^a u', u ->^tau t', u ->^a u'}$ #pause
+// - need smoothness *for $rho^*$* (terms with more than one layer) #pause
+// #example[$t::= 0 | a.t | med ? t$ with the following smooth rules #pause
+// 	#align(center)[
+// 		#grid(columns:4, gutter: 1.5em,
+// 			onerule($0 arrow.b$),
+// 			onerule(
+// 				name:$forall a, b$,
+// 				$a.t ->^a t$,
+// 				$t ->^b t'$
+// 			),
+// 			onerule(
+// 				name:$forall a$,
+// 				$a.t ->^a t$,
+// 				$ t arrow.b$
+// 			),
+// 			onerule(
+// 				$? t ->^tau t'$,
+// 				$t ->^tau t'$
+// 			)
+// 		)
+// 	] #pause
+// 	let $X_1 = {t ->^tau t', u ->^a u'}$ #pause then $"mix" X_1 = { t ->^tau t', t ->^a u', u ->^tau t', u ->^a u'}$ #pause
 
-	#grid(columns: 5, gutter: 3em,
-		uncover("6-",one-rule(
-			$b. ? t ->^b ? t$ ,
-			rule(
-				$? t ->^tau t'$,
-				$t ->^tau t' in X_1$
-			)
-		)) ,
-		uncover("6-", one-rule(
-			$b. ? u arrow.not$ ,
-			rule(
-				$? u arrow.not$,
-				$u ->^tau ? in.not X_1$
-			)
-		)) ,
-		[],
-		uncover("8-",one-rule(
-			$b. ? t ->^b ? t$ ,
-			rule(
-				$? t ->^tau t'$,
-				$t ->^tau t' in "mix" X_1$
-			)
-		)) ,
-		uncover("8-", one-rule(
-			$b. ? u ->^b ? u$ ,
-			rule(
-				$? u ->^tau t'$,
-				$u ->^tau t' in "mix" X_1$
-			)
-		))
-	)
-	#pause $Phi(rho^*)(b.?x_1)(X_1) = { ->^b ? t } pause pause eq.not { ->^b ? t, ->^b ? u } = Phi(rho^*)(b.?x_1)("mix" X_1)$ #pause $-->$ the *stuck* computation is messing with smoothness #emoji.face.unhappy
-]
+// 	#grid(columns: 5, gutter: 3em,
+// 		uncover("6-",onerule(
+// 			$b. ? t ->^b ? t$ ,
+// 			rule(
+// 				$? t ->^tau t'$,
+// 				$t ->^tau t' in X_1$
+// 			)
+// 		)) ,
+// 		uncover("6-", onerule(
+// 			$b. ? u arrow.not$ ,
+// 			rule(
+// 				$? u arrow.not$,
+// 				$u ->^tau ? in.not X_1$
+// 			)
+// 		)) ,
+// 		[],
+// 		uncover("8-",onerule(
+// 			$b. ? t ->^b ? t$ ,
+// 			rule(
+// 				$? t ->^tau t'$,
+// 				$t ->^tau t' in "mix" X_1$
+// 			)
+// 		)) ,
+// 		uncover("8-", onerule(
+// 			$b. ? u ->^b ? u$ ,
+// 			rule(
+// 				$? u ->^tau t'$,
+// 				$u ->^tau t' in "mix" X_1$
+// 			)
+// 		))
+// 	)
+// 	#pause $Phi(rho^*)(b.?x_1)(X_1) = { ->^b ? t } pause pause eq.not { ->^b ? t, ->^b ? u } = Phi(rho^*)(b.?x_1)("mix" X_1)$ #pause $-->$ the *stuck* computation is messing with smoothness #emoji.face.unhappy
+// ]
 
 == Focus on hypothesis : Affineness
 
@@ -628,24 +625,24 @@ $-->$ observations that are "not used" #emoji.face.unhappy
 #example[
 	#align(center)[
 		#grid(columns:4, gutter: 1.5em,
-			one-rule(
+			onerule(
 				$? t ->^tau t'$,
 				$t ->^tau t'$
 			),
 			[#pause $+$],
-			[#only("-5",one-rule(
+			[#only("-5",onerule(
 				name:$forall a eq.not tau$,
 				$?t med ...$,
 				$t ->^a t'$
-			)) #only("6-",one-rule(
+			)) #only("6-",onerule(
 				name:$forall a eq.not tau$,
 				$?t arrow.b$,
 				$t ->^a t'$
 			))],
-			[#only("-5",one-rule(
+			[#only("-5",onerule(
 				$?t med ...$,
 				$t arrow.b$
-			)) #only("6-",one-rule(
+			)) #only("6-",onerule(
 				$?t arrow.b$,
 				$t arrow.b$
 			))],
