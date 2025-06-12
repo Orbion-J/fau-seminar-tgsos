@@ -43,6 +43,8 @@
 }
 
 
+#let mathcounter = counter("mathcounter")
+
 #show: metropolis-theme.with(
   aspect-ratio: "16-9",
   footer: self => [#self.info.title -- Robin Jourde],
@@ -54,7 +56,10 @@
     // institution: [],
     // logo: [],
   ),
-//   config-common(handout: true)
+  config-common(
+		frozen-counters: (mathcounter, ),
+		// handout: true,
+	)
 )
 
 #show footnote.entry: set text(size:15pt)
@@ -70,8 +75,8 @@
 // Theorem config by great-theorem
 #show: great-theorems-init
 #let theorem = mathblock(
-  blocktitle: "Theorem",
-  counter: counter("theorems"),
+	blocktitle: "Theorem",
+	counter: mathcounter,
 	fill:rgb("eeffee"),
 	inset:1em,
 	radius:0.5em,
@@ -370,8 +375,9 @@ Affineness, smoothness and sublinearity are *necessary* #pause
 		$t ->^a t'$
 	),
 	onerule(
-		name:$forall a$,
-		$? t ->^a t + t$,
+		name:$forall a$
+		,
+		$? t ->^e t | t$,
 		$t ->^a t'$
 	),
 )
@@ -379,22 +385,18 @@ Affineness, smoothness and sublinearity are *necessary* #pause
 #align(center)[
 	#diagram(spacing:(0em,1.2em),
 		node((2,0), $!a(b+c)$), edge($a$, "->"),
-		node((2,1), $?(b+c)$), edge($b$, "->"), edge((3,2),$c$, "->"),
-		node((1,2), $(b+c)+(b+c)$), edge($b$, "->"), edge((1,3), $c$, "->"),
-		node((0,3), $0$, stroke:1pt),
-		node((1,3), $0$, stroke:1pt),
-		node((3,2), $(b+c)+(b+c)$), edge($b$, "->"), edge((4,3), $c$, "->"),
-		node((3,3), $0$, stroke:1pt),
-		node((4,3), $0$, stroke:1pt),
+		node((2,1), $?(b+c)$), edge($e$, "->"),
+		node((2,2), $(b+c)|(b+c)$), edge($b b, b c, c b, c c$, "->"), 
+		node((2,3), $0$, stroke:1pt),
 	) #h(3em) #pause #pause
 	#diagram(spacing:(0em,1.2em),
 		node((1,0), $!(a b + a c)$), edge($a$, "->"), edge((2,1), $a$, "->"),
-		node((0,1), $?b$), edge($b$, "->"),
-		node((0,2), $b+ b$), edge($b$, "->"),
-		node((0,3), $0$, stroke:1pt),
-		node((2,1), $?c$), edge($c$, "->"),
-		node((2,2), $c + c$), edge($c$, "->"),
-		node((2,3), $0$, stroke:1pt),
+		node((0,1), $?b$), edge($e$, "->"),
+		node((0,2), $b | b$), edge($b b$, "->"),
+		node((0,3), $0 | 0$, stroke:1pt),
+		node((2,1), $?c$), edge($e$, "->"),
+		node((2,2), $c | c$), edge($c c$, "->"),
+		node((2,3), $0 | 0$, stroke:1pt),
 	) #pause
 ]
 	#meanwhile
